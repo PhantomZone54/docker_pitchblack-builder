@@ -29,4 +29,4 @@ jobs:
     - name: Docker Push Container
       run: docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
     - name: Cleanup
-      run: docker images | awk '(NR>1) && ($$2!~/none/) {print $$1":"$$2}' | grep "$DOCKER_USERNAME/$IMAGE_NAME" | xargs -n1 docker rmi
+      run: docker images | grep "$DOCKER_USERNAME" | awk '(NR>1) && ($$2!~/none/) {print $$1":"$$2}' | grep "$DOCKER_USERNAME/$IMAGE_NAME" | xargs -n1 docker rmi || echo "some error occured to cleanup, don't panic."
