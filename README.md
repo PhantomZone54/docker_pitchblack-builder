@@ -2,11 +2,11 @@
   
   <h1><i>Pitchblack Builder</i></h1>
   
-  [![Build Status](https://travis-ci.com/rokibhasansagar/docker_pitchblack-builder.svg?branch=master)](https://travis-ci.com/rokibhasansagar/docker_pitchblack-builder)
-  [![](https://images.microbadger.com/badges/image/fr3akyphantom/pitchblack-builder.svg)](https://microbadger.com/images/fr3akyphantom/pitchblack-builder "Get your own image badge on microbadger.com")
-  [![](https://images.microbadger.com/badges/version/fr3akyphantom/pitchblack-builder.svg)](https://microbadger.com/images/fr3akyphantom/pitchblack-builder "Get your own version badge on microbadger.com")
-  [![](https://images.microbadger.com/badges/commit/fr3akyphantom/pitchblack-builder.svg)](https://microbadger.com/images/fr3akyphantom/pitchblack-builder "Get your own commit badge on microbadger.com")
-  [![Docker Pulls](https://img.shields.io/docker/pulls/fr3akyphantom/pitchblack-builder)](https://hub.docker.com/r/fr3akyphantom/pitchblack-builder "Show the Docker Repository")
+  [![Actions Status](https://github.com/PhantomZone54/docker_pitchblack-builder/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/PhantomZone54/docker_pitchblack-builder/actions)
+  [![](https://images.microbadger.com/badges/image/fr3akyphantom/pitchblack-builder2.svg)](https://microbadger.com/images/fr3akyphantom/pitchblack-builder2 "Get your own image badge on microbadger.com")
+  [![](https://images.microbadger.com/badges/version/fr3akyphantom/pitchblack-builder2.svg)](https://microbadger.com/images/fr3akyphantom/pitchblack-builder2 "Get your own version badge on microbadger.com")
+  [![](https://images.microbadger.com/badges/commit/fr3akyphantom/pitchblack-builder2.svg)](https://microbadger.com/images/fr3akyphantom/pitchblack-builder2 "Get your own commit badge on microbadger.com")
+  [![Docker Pulls](https://img.shields.io/docker/pulls/fr3akyphantom/pitchblack-builder2)](https://hub.docker.com/r/fr3akyphantom/pitchblack-builder2 "Show the Docker Repository")
   
   <h3><i>Container based upon Ubuntu Bionic 18.04 LTS for building PitchBlack Recovery Projects</i></h3>
   
@@ -20,20 +20,20 @@
 
 ```bash
 # pull the latest image by running the following command
-docker pull fr3akyphantom/pitchblack-builder:latest
+docker pull fr3akyphantom/pitchblack-builder2:latest
 ```
 
 ### Run the Container
 
 ```bash
 docker run --privileged --rm -it \
-  --name docker_pitchblack-builder --hostname pitchblack-builder \
+  --name docker_pitchblack-builder2 --hostname pitchblack-builder2 \
   -e USER_ID=$(id -u) -e GROUP_ID=$(id -g) \
   # mount working directory as volume
   -v "$HOME:/home/builder:rw,z" \
   # mount ccache volume too, host machine should have ccache installed for this
   -v "$HOME/.ccache:/srv/ccache" \
-  fr3akyphantom/pitchblack-builder:latest \
+  fr3akyphantom/pitchblack-builder2:latest \
   /bin/bash
 ```
 :reminder_ribbon: Remember, `/home/builder/pitchblack/` (as of container's `$HOME/pitchblack/`) is the default working directory for the container. So, navigate to __$HOME/pitchblack__ in host machine and then pull the Docker Image.
