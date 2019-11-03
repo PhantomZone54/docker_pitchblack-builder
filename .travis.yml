@@ -1,0 +1,41 @@
+os: linux
+
+dist: xenial
+
+language: minimal
+
+sudo: required
+
+addon:
+  apt:
+    update: true
+
+git:
+  depth: 1
+
+services:
+  - docker
+
+env:
+  global:
+    - IMAGE_NAME=pitchblack-builder
+
+script:
+  - "travis_wait 30 sleep 1800 &"
+  - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
+  - export IMAGE_TAG=`date -u +"%Y%m%dT%H%M"`
+  - echo ".git" > .dockerignore
+  - docker build --rm --force-rm --compress
+    -t $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG -f Dockerfile .
+    --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%S%Z"`
+    --build-arg VCS_REF=`git rev-parse --short HEAD`
+    --build-arg VCS_URL=`git remote get-url origin`
+    --build-arg VERSION='1.0'
+
+after_success:
+  - echo $IMAGE_TAG
+  - docker push $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+  - docker tag $DOCKER_USERNAME/$IMAGE_NAME:$IMAGE_TAG $DOCKER_USERNAME/$IMAGE_NAME:latest
+  - docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+  - docker logout
+  - docker images | awk '(NR>1) && ($$2!~/none/) {print $$1":"$$2}' | grep "$DOCKER_USERNAME/$IMAGE_NAME" | xargs -n1 docker rmi
