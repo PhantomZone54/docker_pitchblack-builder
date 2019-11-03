@@ -1,0 +1,32 @@
+name: Docker Image CI
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    
+    env:
+      GitOAUTHToken: ${{ secrets.GitOAUTHToken }}
+      DOCKER_USERNAME: fr3akyphantom
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      IMAGE_NAME: pitchblack-builder2
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Login into Docker
+      run: echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile
+        --rm --force-rm --compress --no-cache=true --pull
+        --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%S%Z"`
+        --build-arg VCS_REF=`git rev-parse --short HEAD`
+        --build-arg VCS_URL=`git remote get-url origin`
+        --build-arg VERSION='1.0' 
+        --tag $DOCKER_USERNAME/$IMAGE_NAME:latest
+    - name: Docker Push Container
+      run: docker push $DOCKER_USERNAME/$IMAGE_NAME:latest
+    - name: Cleanup
+      run: docker images | awk '(NR>1) && ($$2!~/none/) {print $$1":"$$2}' | grep "$DOCKER_USERNAME/$IMAGE_NAME" | xargs -n1 docker rmi
